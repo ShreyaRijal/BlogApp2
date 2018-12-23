@@ -1,0 +1,60 @@
+﻿@model BlogApp2.Models.BlogWithComments
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Blog.BlogTitle)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Blog.BlogTitle)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Blog.BlogEntry)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Blog.BlogEntry)
+        <dd>
+    </dl>
+</div>
+
+<html>
+<body>
+    <h3>The Comments For this Post</h3>
+    <ul style="list-style-type:none">
+
+        @foreach (var comment in Model.Comments)
+        {
+            @if (comment.BlogCommentedOnID == Model.BlogID)
+            {
+
+                <li style="border: 2px solid green;
+                border-radius: 25px;
+                background-color: lightgreen;
+                margin: 5px;
+                padding: 20px">
+                    @comment.CommentText
+                </li>
+
+            }
+
+        }
+    </ul>
+
+</body>
+</html>
+
+<form asp-action="Read" asp-controller="Blog" method="post">
+    Comment:<br>
+    <input type="hidden" name="BlogID" value="@Model.BlogID">
+    <input type="text" name="CommentText">
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+
+
+
