@@ -1,7 +1,36 @@
-﻿
+﻿@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@model BlogApp2.Models.JustBlogs
+
 @{
     ViewData["Title"] = "MyBlogs";
 }
 
 <h2>MyBlogs</h2>
+<html>
+<body>
+<ul style="list-style-type:none">
+
+    @foreach (var blog in Model.Blogs)
+    {
+
+        if (blog.UserName == Model.UserName)
+        {
+            <a asp-action="Read" asp-route-id="@blog.BlogEntryID">
+                <li style="border: 2px solid green;
+                border-radius: 10px;
+                background-color: lightgreen;
+                margin-bottom: 20px;
+                padding: 30px">
+                    Posted By: @blog.UserName  <br /><br />
+                    @blog.BlogTitle
+                </li>
+            </a>
+        }
+    }
+</ul>
+
+</body>
+</html>
+
+
 

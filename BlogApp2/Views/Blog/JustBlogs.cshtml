@@ -13,14 +13,14 @@
 
         @foreach (var blog in Model)
         {
-
             <a asp-action="Read" asp-route-id="@blog.BlogEntryID">
                 <li style="border: 2px solid green;
-                border-radius: 25px;
+                border-radius: 10px;
                 background-color: lightgreen;
-                margin: 20px;
-                padding: 20px">
-                    @blog.BlogTitle @blog.BlogEntry
+                margin-bottom: 20px;
+                padding: 30px">
+                   Posted By: @blog.UserName  <br /><br />
+                   @blog.BlogTitle
                 </li>
             </a>
 

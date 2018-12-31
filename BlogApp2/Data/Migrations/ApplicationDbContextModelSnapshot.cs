@@ -32,6 +32,9 @@ namespace BlogApp2.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
+                    b.Property<string>("UserName")
+                        .IsRequired();
+
                     b.HasKey("BlogEntryID");
 
                     b.ToTable("Blogs");

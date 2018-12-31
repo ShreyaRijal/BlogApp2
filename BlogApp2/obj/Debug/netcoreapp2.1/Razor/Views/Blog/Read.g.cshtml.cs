@@ -107,7 +107,7 @@ using BlogApp2.Models;
             WriteLiteral("\r\n        <dd>\r\n    </dl>\r\n</div>\r\n\r\n<html>\r\n");
             EndContext();
             BeginContext(535, 545, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f13dfa93fba6472fbfff1e3986c02ff9", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "768c44d05cbf4fe5b798d9aa4b588829", async() => {
                 BeginContext(541, 84, true);
                 WriteLiteral("\r\n    <h3>The Comments For this Post</h3>\r\n    <ul style=\"list-style-type:none\">\r\n\r\n");
                 EndContext();
@@ -170,7 +170,7 @@ using BlogApp2.Models;
             WriteLiteral("\r\n</html>\r\n\r\n");
             EndContext();
             BeginContext(1093, 250, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3d45ac124735418695ed9db05362c54b", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3376d468feb2428e8fe8943a692ff9a6", async() => {
                 BeginContext(1153, 58, true);
                 WriteLiteral("\r\n    Comment:<br>\r\n    <input type=\"hidden\" name=\"BlogID\"");
                 EndContext();

@@ -12,6 +12,11 @@ using Microsoft.EntityFrameworkCore;
 using BlogApp2.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Claims;
+using BlogApp2.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace BlogApp2
 {
@@ -37,14 +42,17 @@ namespace BlogApp2
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context, UserManager<IdentityUser> userManager, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -63,12 +71,20 @@ namespace BlogApp2
 
             app.UseAuthentication();
 
+            DbInitializer.Intialize(context, userManager);
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Blog}/{action=JustBlogs}/{id?}");
             });
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
+            app.UseMvc();
+            app.UseAuthentication();
+        }
+
         }
     }
-}

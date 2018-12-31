@@ -1,21 +1,44 @@
 ﻿@model BlogApp2.Models.BlogModel
 @addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
 @{
-    ViewData["Title"] = "Blog";
+    ViewData["Title"] = "Create Your Blog Below";
 }
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
+<style>
+    textarea {
+        border-radius: 10px;
+        border: 2px solid green;
+        background-color: lightgreen;
+    }
+    button {
+        border-radius: 10px;
+        border: 2px solid green;
+        background-color: lightgreen;
+    }
+    button:hover {
+            background-color:green;
+            color: white;
+    }
+       
+</style>
 
 <html>
 <body>
+
     <form asp-action="Create" asp-controller="Blog" method="post">
 
-        <input type="text" name="title" value="" />
-        <input type="text" name="entry" value="" />
+        Title<br />
+        <textarea id="txtArea" rows="1" cols="100" name="title" value=""></textarea>
+        <br /><br />
+        Body <br />
+        <textarea id="txtArea" rows="10" cols="100" name="entry" value=""></textarea>
+        <br /><br />
         <button type="submit" value="Submit">Create</button>
 
     </form>
 
 </body>
+
 
 </html>

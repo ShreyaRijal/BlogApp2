@@ -9,12 +9,8 @@ namespace BlogApp2.Models
 {
     public class BlogModel
     {
-        BloggersModel blogger = new BloggersModel();
-
-        public string BloggersID()
-        {
-            return blogger.BloggersID;
-        }
+        [Required]
+        public string UserName { get; set; }
 
         [Key]
         [Required]

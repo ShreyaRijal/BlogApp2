@@ -69,7 +69,7 @@ WriteAttributeValue("", 170, Url.Action("Create", "Blog"), 170, 29, false);
             WriteLiteral(">\r\n\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n");
             EndContext();
             BeginContext(251, 623, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "32f8e7292dde42ca95afafdfc8624b7b", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "99c7eb67acd8418cb8e537aab008754e", async() => {
                 BeginContext(257, 12, true);
                 WriteLiteral("\r\n    <ul>\r\n");
                 EndContext();
@@ -106,7 +106,7 @@ WriteAttributeValue("", 170, Url.Action("Create", "Blog"), 170, 29, false);
                 WriteLiteral("\r\n            <td>\r\n                ");
                 EndContext();
                 BeginContext(569, 66, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d7e311261b41444189c9d04c2d4a22d3", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "30c30c6d96e5481ba27ad9390410313b", async() => {
                     BeginContext(625, 6, true);
                     WriteLiteral("Update");
                     EndContext();
@@ -141,7 +141,7 @@ WriteAttributeValue("", 170, Url.Action("Create", "Blog"), 170, 29, false);
                 WriteLiteral(" |\r\n                ");
                 EndContext();
                 BeginContext(655, 62, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "574e46baa1574297a7e7958b74c36ea9", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ef5e01702a5c4261aa7635e47a7a93e7", async() => {
                     BeginContext(709, 4, true);
                     WriteLiteral("Read");
                     EndContext();
@@ -176,7 +176,7 @@ WriteAttributeValue("", 170, Url.Action("Create", "Blog"), 170, 29, false);
                 WriteLiteral(" |\r\n                ");
                 EndContext();
                 BeginContext(737, 66, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5042370142d842ee82d4098317330228", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8b3834758e494ee89257e26d8e847631", async() => {
                     BeginContext(793, 6, true);
                     WriteLiteral("Delete");
                     EndContext();

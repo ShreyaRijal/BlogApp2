@@ -7,29 +7,39 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using BlogApp2.Data;
 using BlogApp2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogApp2.Controllers
 {
+
     //As this class is a controller, it inherits from the controller class.
     public class BlogController : Controller
     {
         //An instance of the database.
         private ApplicationDbContext db;
 
+        private readonly UserManager<IdentityUser> _userManager;
+        private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         //Creating a constructor of this controller to have a database.
-        public BlogController(ApplicationDbContext _db)
+        public BlogController(ApplicationDbContext _db, UserManager<IdentityUser> userManager)
         {
             db = _db;
+
+            this._userManager = userManager;
         }
 
         /*Using async to access the Index view more quickly. Getting the request from the URL.*/
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await db.Blogs.ToListAsync());
@@ -38,12 +48,24 @@ namespace BlogApp2.Controllers
         //Get request for the CreateBlog view.
 
         [HttpGet]
-        public IActionResult MyBlogs()
+        [Authorize]
+        public async Task<IActionResult> MyBlogs()
         {
+            var user = await GetCurrentUserAsync();
+
+            string username = user?.UserName;
+
+            List<BlogModel> blogs = await db.Blogs.Where(x => x.UserName == username).ToListAsync();
+
+            JustBlogs justBlogs = new JustBlogs(blogs);
+
+            justBlogs.UserName = username;
+
             return View("MyBlogs");
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Create()
         {
             return View("CreateBlog");
@@ -51,10 +73,18 @@ namespace BlogApp2.Controllers
 
         //Post request from the view CreateBlog.
         [HttpPost]
-        public IActionResult Create(string title, string entry)
+        [Authorize]
+        public async Task<IActionResult> Create(string title, string entry)
         {
+
             //Creating an instance of a blog object.
             BlogModel blog = new BlogModel();
+
+            var user = await GetCurrentUserAsync();
+
+            string username = user?.UserName;
+
+            blog.UserName = username;
             blog.BlogTitle = title;
             blog.BlogEntry = entry;
             if (ModelState.IsValid)
@@ -72,6 +102,7 @@ namespace BlogApp2.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Read(string CommentText, string BlogID)
         {
             CommentModel comment = new CommentModel();
@@ -106,8 +137,10 @@ namespace BlogApp2.Controllers
         /*Finds the blog associated with the id passed into this method and passes the parameters 
             of the blog into the Read view.*/
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Read(string id)
         {
+
             BlogModel blog = db.Blogs.Find(id);
 
             List <CommentModel> comments = await db.Comments.Where(x => x.BlogCommentedOnID == id).ToListAsync();
@@ -115,38 +148,13 @@ namespace BlogApp2.Controllers
             BlogWithComments b = new BlogWithComments(blog, comments);
             b.BlogID = id;
 
-
             return View(b);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Read ([Bind("CommentText","BlogID")] BlogWithComments blogWithComments)
-        //{
-        //    CommentModel comment = new CommentModel();
-        //    comment.CommentText = blogWithComments.CommentText;
-        //    comment.BlogCommentedOnID = blogWithComments.BlogID;
-
-        //    BlogModel blog = await db.Blogs.SingleOrDefaultAsync(m => m.BlogEntryID == blogWithComments.BlogID);
-
-        //    if (blog == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    //comment.MyBlog = blog;
-
-        //    db.Comments.Add(comment);
-
-
-        //    blogWithComments.Blog = blog;
-
-        //    //Returning the appropriate view.
-        //    return View(blogWithComments);
-        //}
-
-
         //A get request for the ShowPosts view.
+        
         [HttpGet]
+        [Authorize]
         public IActionResult ShowPosts()
         {
             //Returning the list of blog objects saved. 
@@ -154,6 +162,7 @@ namespace BlogApp2.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult JustBlogs()
         {
             //Returning the list of blog objects saved. 
@@ -161,6 +170,7 @@ namespace BlogApp2.Controllers
         }
 
         /*Checking if a blog exists by checking for its ID which is a private key (no duplication).*/
+        [Authorize]
         private bool BlogExists(string id)
         {
             return db.Blogs.Any(e => e.BlogEntryID == id);
@@ -168,6 +178,7 @@ namespace BlogApp2.Controllers
 
         /*Finds the blog associated with the id passed into this method and passes the parameters 
         of the blog into the Update view.*/
+        [Authorize]
         public async Task<IActionResult> Update(string id)
         {
 
@@ -191,6 +202,7 @@ namespace BlogApp2.Controllers
         This method also mitigates cross site request forgeries.*/
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Update(string id, [Bind("BlogEntryID,BlogTitle,BlogEntry")] BlogModel blog)
         {
 
@@ -226,6 +238,7 @@ namespace BlogApp2.Controllers
 
         /*Finds the blog associated with the id passed into this method and passes the parameters 
         of the blog into the Delete view.*/
+        [Authorize]
         public async Task<IActionResult> Delete(string id)
         {
 
@@ -249,6 +262,7 @@ namespace BlogApp2.Controllers
         It is also a post request.*/
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Confirm(string id)
         {
             //Finding blog in the database.
