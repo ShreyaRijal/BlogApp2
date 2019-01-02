@@ -15,9 +15,9 @@ namespace BlogApp2.Models
         static string[] the_roles = new string[] { "Blogger", "User" };
 
 
-        public static void Intialize(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public static async Task IntializeAsync(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
-            CreateUsers(userManager);
+            //await CreateUsersAsync(userManager);
             // await CreateRoles(roleManager);
         }
 
@@ -28,7 +28,7 @@ namespace BlogApp2.Models
             context.SaveChanges();
         }
 
-        private static void CreateUsers(UserManager<IdentityUser> userManager)
+        private static async Task CreateUsersAsync(UserManager<IdentityUser> um)
         {
             IdentityUser user = new IdentityUser
             {
@@ -36,7 +36,9 @@ namespace BlogApp2.Models
                 Email = "shreyaAdmin@email.com"
             };
 
-            userManager.CreateAsync(user, "P@ssword123!").Wait();
+            // userManager.CreateAsync(user, "P@ssword123!").Wait();
+            var claims = (await um.GetClaimsAsync(user)).Select(x=>x.Type);
+            await um.AddClaimAsync(user, new System.Security.Claims.Claim("Admin", "true"));
         }
 
         private static async Task CreateRoles(RoleManager<IdentityRole> rm)
@@ -49,34 +51,5 @@ namespace BlogApp2.Models
                 }
             }
         }
-
-        //    private static async Task<bool> Roles(ApplicationDbContext context)
-        //    {
-        //        IdentityResult ir;
-        //        var rs = new RoleStore<IdentityRole>(context);
-        //        var rm = new RoleManager<IdentityRole>(rs);
-
-        //        ir = await rm.CreateAsync(new IdentityRole("blogger"));
-
-        //        var us = new UserStore<UsersModel>(context);
-        //        var um = new UserManager<>(us);
-
-
-        //        var user = new UsersModel()
-        //        {
-        //            Email = "canblog@email.com",
-        //        };
-
-        //        ir = await um.CreateAsync(user, "P@ssword123!");
-
-        //        if (ir.Succeeded == false)
-        //        {
-        //            return ir.Succeeded;
-        //        }
-
-        //        ir = await um.AddToRoleAsync(user, "blogger");
-        //        return ir.Succeeded;
-        //    }
-        //}
     }
 }

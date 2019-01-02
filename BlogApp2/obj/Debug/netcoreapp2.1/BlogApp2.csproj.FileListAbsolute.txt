@@ -31,11 +31,9 @@ C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\BlogApp2.csproj.CopyComplete
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\CreateBlog.g.cshtml.cs
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\Delete.g.cshtml.cs
-C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\Index.g.cshtml.cs
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\JustBlogs.g.cshtml.cs
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\MyBlogs.g.cshtml.cs
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\Read.g.cshtml.cs
-C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\ShowPosts.g.cshtml.cs
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\Update.g.cshtml.cs
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Areas\Identity\Pages\Account\Register.g.cshtml.cs
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Areas\Identity\Pages\Account\_ViewImports.g.cshtml.cs

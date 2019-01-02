@@ -12,25 +12,25 @@
         <form asp-action="Update">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="BlogEntryID" />
-            <div class="form-group">
-                <label asp-for="BlogTitle" class="control-label"></label>
-                <input asp-for="BlogTitle" class="form-control" />
-                <span asp-validation-for="BlogTitle" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BlogEntry" class="control-label"></label>
-                <input asp-for="BlogEntry" class="form-control" />
-                <span asp-validation-for="BlogEntry" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+                <div class="form-group">
+                    <label asp-for="BlogTitle" class="control-label"></label>
+                    <input asp-for="BlogTitle" class="form-control" />
+                    <span asp-validation-for="BlogTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BlogEntry" class="control-label"></label>
+                    <input asp-for="BlogEntry" class="form-control" />
+                    <span asp-validation-for="BlogEntry" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="MyBlogs">Back to List</a>
 </div>
 
 @section Scripts {

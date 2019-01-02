@@ -48,6 +48,11 @@ namespace BlogApp2
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Blogger", policy => policy.RequireClaim("Admin", "true"));
+            });
+
 
         }
 
@@ -71,7 +76,6 @@ namespace BlogApp2
 
             app.UseAuthentication();
 
-            DbInitializer.Intialize(context, userManager);
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -84,7 +88,30 @@ namespace BlogApp2
             app.UseCookiePolicy();
             app.UseMvc();
             app.UseAuthentication();
+
+            CreateClaim(serviceProvider).Wait();
         }
+
+        private async Task CreateClaim(IServiceProvider serviceProvider)
+        {
+            var um = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+            IdentityUser user = await um.FindByEmailAsync("shreyaAdmin@email.com");
+            IdentityUser user2 = await um.FindByEmailAsync("canblog@email.com");
+
+            var claimList = (await um.GetClaimsAsync(user)).Select(p => p.Type);
+            var claimList2 = (await um.GetClaimsAsync(user)).Select(p => p.Type);
+
+            if (!claimList.Contains("Admin"))
+            {
+                await um.AddClaimAsync(user, new Claim("Admin", "true"));
+            }
+
+            if (!claimList2.Contains("Admin"))
+            {
+                await um.AddClaimAsync(user2, new Claim("Admin", "true"));
+            }
 
         }
     }
+}

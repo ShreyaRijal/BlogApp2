@@ -37,35 +37,24 @@ namespace BlogApp2.Controllers
             this._userManager = userManager;
         }
 
-        /*Using async to access the Index view more quickly. Getting the request from the URL.*/
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Index()
-        {
-            return View(await db.Blogs.ToListAsync());
-        }
-
         //Get request for the CreateBlog view.
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "Blogger")]
         public async Task<IActionResult> MyBlogs()
         {
             var user = await GetCurrentUserAsync();
 
             string username = user?.UserName;
 
-            List<BlogModel> blogs = await db.Blogs.Where(x => x.UserName == username).ToListAsync();
+            List<BlogModel> blogs = new List<BlogModel>();
+            blogs = await db.Blogs.Where(x => x.UserName == username).ToListAsync();
 
-            JustBlogs justBlogs = new JustBlogs(blogs);
-
-            justBlogs.UserName = username;
-
-            return View("MyBlogs");
+            return View(blogs);
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "Blogger")]
         public IActionResult Create()
         {
             return View("CreateBlog");
@@ -73,7 +62,7 @@ namespace BlogApp2.Controllers
 
         //Post request from the view CreateBlog.
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "Blogger")]
         public async Task<IActionResult> Create(string title, string entry)
         {
 
@@ -94,7 +83,7 @@ namespace BlogApp2.Controllers
 
                 //Saving the changes made to the database.
                 db.SaveChanges();
-                return RedirectToAction(nameof(ShowPosts));
+                return RedirectToAction(nameof(MyBlogs));
             }
 
             //Returning the appropriate view.
@@ -114,7 +103,7 @@ namespace BlogApp2.Controllers
 
             List<CommentModel> comments = await db.Comments.Where(x => x.BlogCommentedOnID == BlogID).ToListAsync();
 
-            BlogWithComments b = new BlogWithComments(blog,comments);
+            BlogWithComments b = new BlogWithComments(blog, comments);
             b.BlogID = BlogID;
 
             if (ModelState.IsValid)
@@ -126,12 +115,12 @@ namespace BlogApp2.Controllers
 
                 if (BlogID != null)
                 {
-                    return View(b);
+                    return await Read(BlogID);
                 }
             }
 
             //Returning the appropriate view.
-           return View(b);
+            return View(b);
         }
 
         /*Finds the blog associated with the id passed into this method and passes the parameters 
@@ -143,7 +132,7 @@ namespace BlogApp2.Controllers
 
             BlogModel blog = db.Blogs.Find(id);
 
-            List <CommentModel> comments = await db.Comments.Where(x => x.BlogCommentedOnID == id).ToListAsync();
+            List<CommentModel> comments = await db.Comments.Where(x => x.BlogCommentedOnID == id).ToListAsync();
 
             BlogWithComments b = new BlogWithComments(blog, comments);
             b.BlogID = id;
@@ -152,14 +141,6 @@ namespace BlogApp2.Controllers
         }
 
         //A get request for the ShowPosts view.
-        
-        [HttpGet]
-        [Authorize]
-        public IActionResult ShowPosts()
-        {
-            //Returning the list of blog objects saved. 
-            return View(db.Blogs.ToList());
-        }
 
         [HttpGet]
         [AllowAnonymous]
@@ -206,34 +187,35 @@ namespace BlogApp2.Controllers
         public async Task<IActionResult> Update(string id, [Bind("BlogEntryID,BlogTitle,BlogEntry")] BlogModel blog)
         {
 
+            var user = await GetCurrentUserAsync();
+            string username = user?.UserName;
+
             //Searching for id.
             if (id != blog.BlogEntryID)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    //Updating and saving database
-                    db.Update(blog);
-                    await db.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BlogExists(blog.BlogEntryID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(ShowPosts));
+                blog.UserName = username;
+                //Updating and saving database
+                db.Update(blog);
+                await db.SaveChangesAsync();
             }
-            return View(blog);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BlogExists(blog.BlogEntryID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            
+            }
+
+            return RedirectToAction(nameof(MyBlogs));
         }
 
         /*Finds the blog associated with the id passed into this method and passes the parameters 
@@ -275,7 +257,7 @@ namespace BlogApp2.Controllers
             await db.SaveChangesAsync();
 
             //Going back to view with the list of blogs.
-            return RedirectToAction(nameof(ShowPosts));
+            return RedirectToAction(nameof(MyBlogs));
         }
 
 
