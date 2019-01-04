@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -30,8 +33,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Blog" asp-action="Create">Create</a></li>
-                    <li><a asp-area="" asp-controller="Blog" asp-action="MyBlogs">My Blogs</a></li>
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Blogger")).Succeeded)
+                    {
+                        <li><a asp-area="" asp-controller="Blog" asp-action="Create">Create</a></li>
+                        <li><a asp-area="" asp-controller="Blog" asp-action="MyBlogs">My Blogs</a></li>
+                    }
                 </ul>
                 <partial name="_LoginPartial" />
             </div>

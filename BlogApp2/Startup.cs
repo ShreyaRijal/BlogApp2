@@ -100,7 +100,7 @@ namespace BlogApp2
             IdentityUser user2 = await um.FindByEmailAsync("canblog@email.com");
 
             var claimList = (await um.GetClaimsAsync(user)).Select(p => p.Type);
-            var claimList2 = (await um.GetClaimsAsync(user)).Select(p => p.Type);
+            var claimList2 = (await um.GetClaimsAsync(user2)).Select(p => p.Type);
 
             if (!claimList.Contains("Admin"))
             {

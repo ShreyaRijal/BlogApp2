@@ -61,7 +61,7 @@ using BlogApp2.Models;
             WriteLiteral("\r\n<h2>Browse all the posts!</h2>\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n\r\n\r\n");
             EndContext();
             BeginContext(231, 545, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7d800a4864084417982eb659f85b8580", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "bc3f521a9be44bac90786e0bc470dd1a", async() => {
                 BeginContext(237, 43, true);
                 WriteLiteral("\r\n    <ul style=\"list-style-type:none\">\r\n\r\n");
                 EndContext();
@@ -75,7 +75,7 @@ using BlogApp2.Models;
                 WriteLiteral("            ");
                 EndContext();
                 BeginContext(341, 400, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "196b66e143854c36befaa452f4c04461", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "ea8476f9a6ac4ce18baa0a84d68fe8c8", async() => {
                     BeginContext(395, 241, true);
                     WriteLiteral("\r\n                <li style=\"border: 2px solid green;\r\n                border-radius: 10px;\r\n                background-color: lightgreen;\r\n                margin-bottom: 20px;\r\n                padding: 30px\">\r\n                   Posted By: ");
                     EndContext();

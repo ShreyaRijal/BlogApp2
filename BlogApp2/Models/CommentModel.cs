@@ -18,6 +18,6 @@ namespace BlogApp2.Models
 
         public string BlogCommentedOnID { get; set; }
 
-       // public BlogModel MyBlog { get; set; }
+       public string UserName { get; set; }
     }
 }

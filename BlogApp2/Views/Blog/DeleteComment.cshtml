@@ -1,0 +1,29 @@
+﻿@model BlogApp2.Models.CommentModel
+
+@{
+        ViewData["Title"] = "Delete Comment";
+    }
+
+<h3> Are you sure you want to delete this comment?</h3>
+<div>
+
+    <hr />
+
+    <dl class="dl-horizontal">
+        <dt>
+            Comment:
+        </dt>
+        <dd>
+
+            @Html.DisplayFor(model => model.CommentText)
+        </dd>
+    </dl>
+
+    <form asp-action="DeleteComment">
+        <input type="hidden" asp-for="CommentsId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+    </form>
+
+    <a asp-action="Read" asp-route-id="@Model.BlogCommentedOnID">Back to List</a>
+</div>
+

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BlogApp2.Controllers;
+using BlogApp2.Data;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,9 +19,16 @@ namespace BlogApp2.Models
 
         public string CommentText { get; set; }
 
-        public BlogWithComments (BlogModel Blog)
+        public string UserName { get; set; }
+
+        public BlogWithComments(CommentModel comment)
         {
-            this.Blog = Blog;
+            this.Comment = comment;
+        }
+
+        public BlogWithComments (BlogModel blog)
+        {
+            this.Blog = blog;
         }
         public BlogWithComments(BlogModel Blog, List<CommentModel> Comments)
         {

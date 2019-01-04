@@ -1,4 +1,6 @@
 ﻿@model BlogApp2.Models.BlogWithComments
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Details";
@@ -37,7 +39,13 @@
                 background-color: lightgreen;
                 margin: 5px;
                 padding: 20px">
+                    Posted By: @comment.UserName <br /><br />
                     @comment.CommentText
+
+                    @if (comment.UserName == Model.UserName)
+                    {
+                        <a asp-action="DeleteComment" asp-route-id="@comment.CommentsId">Delete</a>
+                    }
                 </li>
 
             }

@@ -38,7 +38,6 @@ namespace BlogApp2.Controllers
         }
 
         //Get request for the CreateBlog view.
-
         [HttpGet]
         [Authorize(Policy = "Blogger")]
         public async Task<IActionResult> MyBlogs()
@@ -96,8 +95,13 @@ namespace BlogApp2.Controllers
         {
             CommentModel comment = new CommentModel();
 
+            var user = await GetCurrentUserAsync();
+
+            string username = user?.UserName;
+
             comment.CommentText = CommentText;
             comment.BlogCommentedOnID = BlogID;
+            comment.UserName = username;
 
             BlogModel blog = db.Blogs.Find(BlogID);
 
@@ -123,8 +127,7 @@ namespace BlogApp2.Controllers
             return View(b);
         }
 
-        /*Finds the blog associated with the id passed into this method and passes the parameters 
-            of the blog into the Read view.*/
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Read(string id)
@@ -134,9 +137,13 @@ namespace BlogApp2.Controllers
 
             List<CommentModel> comments = await db.Comments.Where(x => x.BlogCommentedOnID == id).ToListAsync();
 
+            var user = await GetCurrentUserAsync();
+
+            string username = user?.UserName;
+
             BlogWithComments b = new BlogWithComments(blog, comments);
             b.BlogID = id;
-
+            b.UserName = username;
             return View(b);
         }
 
@@ -159,7 +166,7 @@ namespace BlogApp2.Controllers
 
         /*Finds the blog associated with the id passed into this method and passes the parameters 
         of the blog into the Update view.*/
-        [Authorize]
+        [Authorize(Policy = "Blogger")]
         public async Task<IActionResult> Update(string id)
         {
 
@@ -168,6 +175,9 @@ namespace BlogApp2.Controllers
                 return NotFound();
             }
 
+            var user = await GetCurrentUserAsync();
+            string username = user?.UserName;
+
             //Finds id in the database.
             var blog = await db.Blogs.FindAsync(id);
             if (blog == null)
@@ -175,7 +185,11 @@ namespace BlogApp2.Controllers
                 return NotFound();
             }
 
-            return View(blog);
+            if (blog.UserName == username)
+            {
+                return View(blog);
+            }
+            return NotFound();
         }
 
 
@@ -183,7 +197,7 @@ namespace BlogApp2.Controllers
         This method also mitigates cross site request forgeries.*/
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Policy = "Blogger")]
         public async Task<IActionResult> Update(string id, [Bind("BlogEntryID,BlogTitle,BlogEntry")] BlogModel blog)
         {
 
@@ -197,10 +211,12 @@ namespace BlogApp2.Controllers
             }
             try
             {
+
                 blog.UserName = username;
                 //Updating and saving database
                 db.Update(blog);
                 await db.SaveChangesAsync();
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -212,7 +228,7 @@ namespace BlogApp2.Controllers
                 {
                     throw;
                 }
-            
+
             }
 
             return RedirectToAction(nameof(MyBlogs));
@@ -220,9 +236,11 @@ namespace BlogApp2.Controllers
 
         /*Finds the blog associated with the id passed into this method and passes the parameters 
         of the blog into the Delete view.*/
-        [Authorize]
+        [Authorize(Policy = "Blogger")]
         public async Task<IActionResult> Delete(string id)
         {
+            var user = await GetCurrentUserAsync();
+            string username = user?.UserName;
 
             if (id == null)
             {
@@ -237,14 +255,18 @@ namespace BlogApp2.Controllers
                 return NotFound();
             }
 
-            return View(blog);
+            if (blog.UserName == username)
+            {
+                return View(blog);
+            }
+            return NotFound();
         }
 
         /*This method confirms deletion once selected and mitigates cross site request forgeries.
         It is also a post request.*/
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Policy = "Blogger")]
         public async Task<IActionResult> Confirm(string id)
         {
             //Finding blog in the database.
@@ -260,7 +282,43 @@ namespace BlogApp2.Controllers
             return RedirectToAction(nameof(MyBlogs));
         }
 
+        [Authorize]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
 
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var comment = await db.Comments
+                .FirstOrDefaultAsync(m => m.CommentsId.Equals(id));
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            return View(comment);
+        }
+
+        [HttpPost, ActionName("DeleteComment")]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> ConfirmComment(int id)
+        {
+
+            var comment = await db.Comments.FindAsync(id);
+
+            string BlogID = comment.BlogCommentedOnID;
+
+            db.Comments.Remove(comment);
+
+            //Updating changes.
+            await db.SaveChangesAsync();
+
+
+            return View(comment);
+        }
     }
 
 }
