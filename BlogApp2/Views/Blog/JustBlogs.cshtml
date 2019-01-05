@@ -7,7 +7,6 @@
 <h2>Browse all the posts!</h2>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-
 <body>
     <ul style="list-style-type:none">
 
@@ -19,8 +18,18 @@
                 background-color: lightgreen;
                 margin-bottom: 20px;
                 padding: 30px">
-                   Posted By: @blog.UserName  <br /><br />
-                   @blog.BlogTitle
+                    Posted By: @blog.UserName  <br /><br />
+                    Title: @blog.BlogTitle <br /><br />
+
+                    @Html.ActionLink("Like", "AddLikes", new { BlogID = blog.BlogEntryID })
+                    &nbsp;
+                    @blog.NumOfLikes
+                    &nbsp;
+                    @Html.ActionLink("Dislike", "AddDislikes", new { BlogID = blog.BlogEntryID })
+                    &nbsp;
+                    @blog.NumOfDislikes
+
+
                 </li>
             </a>
 

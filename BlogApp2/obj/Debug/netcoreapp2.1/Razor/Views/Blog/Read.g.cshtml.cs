@@ -114,7 +114,7 @@ using Microsoft.AspNetCore.Authorization;
             WriteLiteral("\r\n        <dd>\r\n    </dl>\r\n</div>\r\n\r\n<html>\r\n");
             EndContext();
             BeginContext(630, 819, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "97bc9539229a435cbf1e0d565c4b7a0c", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9214e64fc2a04bfb8b37e3659fd4d6eb", async() => {
                 BeginContext(636, 84, true);
                 WriteLiteral("\r\n    <h3>The Comments For this Post</h3>\r\n    <ul style=\"list-style-type:none\">\r\n\r\n");
                 EndContext();
@@ -165,7 +165,7 @@ using Microsoft.AspNetCore.Authorization;
                 WriteLiteral("                        ");
                 EndContext();
                 BeginContext(1276, 75, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "07c9a9e60235443aaf9fb257b4c4488d", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "da82b168a7ba499094baa340c44f2d6f", async() => {
                     BeginContext(1341, 6, true);
                     WriteLiteral("Delete");
                     EndContext();
@@ -239,7 +239,7 @@ using Microsoft.AspNetCore.Authorization;
             WriteLiteral("\r\n</html>\r\n\r\n");
             EndContext();
             BeginContext(1462, 250, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7ff72cbaa9f349eaad1175d5ca1aa812", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "87596f8001914a1f92ddb218850b034c", async() => {
                 BeginContext(1522, 58, true);
                 WriteLiteral("\r\n    Comment:<br>\r\n    <input type=\"hidden\" name=\"BlogID\"");
                 EndContext();

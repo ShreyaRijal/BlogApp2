@@ -4,14 +4,16 @@ using BlogApp2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlogApp2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190104200327_LikesAndDislikes")]
+    partial class LikesAndDislikes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,23 +65,6 @@ namespace BlogApp2.Data.Migrations
                     b.HasKey("CommentsId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("BlogApp2.Models.UserLikesOrDislikesBlog", b =>
-                {
-                    b.Property<string>("UserName");
-
-                    b.Property<string>("BlogID");
-
-                    b.Property<bool>("HasDisliked");
-
-                    b.Property<bool>("HasLiked");
-
-                    b.HasKey("UserName", "BlogID");
-
-                    b.HasAlternateKey("BlogID", "UserName");
-
-                    b.ToTable("LikesOrDislikesBlogs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

@@ -16,6 +16,11 @@ namespace BlogApp2.Models
         [Required]
         public string BlogEntryID { get; set; }
 
+        [Required]
+        public int NumOfLikes { get; set; }
+
+        [Required]
+        public int NumOfDislikes { get; set; }
 
         [MinLength(2)]
         [MaxLength(100)]

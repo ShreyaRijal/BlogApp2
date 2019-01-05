@@ -16,8 +16,10 @@ namespace BlogApp2.Models
         [Required]
         public string CommentText { get; set; }
 
+        [Required]
         public string BlogCommentedOnID { get; set; }
 
-       public string UserName { get; set; }
+        [Required]
+        public string UserName { get; set; }
     }
 }

@@ -16,5 +16,14 @@ namespace BlogApp2.Data
         public DbSet<BlogModel> Blogs { get; set; }
 
         public DbSet<CommentModel> Comments { get; set; }
+
+        public DbSet<UserLikesOrDislikesBlog> LikesOrDislikesBlogs { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<UserLikesOrDislikesBlog>().HasKey(e => new { e.UserName, e.BlogID });
+
+        }
     }
 }
