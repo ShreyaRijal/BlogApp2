@@ -191,12 +191,12 @@ namespace BlogApp2.Controllers
             if (blogID != null)
             {
                 BlogModel blog = await db.Blogs.FindAsync(blogID);
-                UserLikesOrDislikesBlog liker = await db.LikesOrDislikesBlogs.FindAsync(username, blog.BlogEntryID);
+                UserLikesOrDislikesBlog liker = await db.LikesOrDislikesBlogs.FindAsync(
+                    username, blog.BlogEntryID);
                 if (liker == null)
                 {
                     //Add the user and their like to the database for a specific blog.
-                    UserLikesOrDislikesBlog likesOrDislikes =
-                        new UserLikesOrDislikesBlog();
+                    UserLikesOrDislikesBlog likesOrDislikes =  new UserLikesOrDislikesBlog();
 
                     likesOrDislikes.UserName = username;
                     likesOrDislikes.BlogID = blog.BlogEntryID;
@@ -205,9 +205,10 @@ namespace BlogApp2.Controllers
                     db.LikesOrDislikesBlogs.Add(likesOrDislikes);
                     blog.NumOfLikes++;
                     db.SaveChanges();
-                    return PartialView("AddLikes", blog);
-                    //return await Read(BlogID);
+                    
+                    return RedirectToAction("Read", new { id = blogID });
                 }
+
                 //Logic to toggle the like.
                 if (liker.HasLiked == false && liker.HasDisliked == true)
                 {
@@ -216,7 +217,7 @@ namespace BlogApp2.Controllers
                     blog.NumOfLikes++;
                     blog.NumOfDislikes--;
                     db.SaveChanges();
-                    return PartialView("AddLikes", blog);
+                    return RedirectToAction("Read", new { id = blogID });
                 }
                 if (liker.HasLiked == true && liker.HasDisliked == false)
                 {
@@ -224,7 +225,7 @@ namespace BlogApp2.Controllers
                     liker.HasLiked = false;
                     blog.NumOfLikes--;
                     db.SaveChanges();
-                    return PartialView("AddLikes", blog);
+                    return RedirectToAction("Read", new { id = blogID });
                 }
                 if (liker.HasLiked == false && liker.HasDisliked == false)
                 {
@@ -232,12 +233,12 @@ namespace BlogApp2.Controllers
                     liker.HasLiked = true;
                     blog.NumOfLikes++;
                     db.SaveChanges();
-                    return PartialView("AddLikes", blog);
-                    //return await Read(BlogID);
+                    return RedirectToAction("Read", new { id = blogID });
+                    
                 }
 
             }
-            return PartialView("AddLikes");
+            return RedirectToAction("Read", new { id = blogID });
         }
 
 
@@ -250,12 +251,12 @@ namespace BlogApp2.Controllers
             if (blogID != null)
             {
                 BlogModel blog = await db.Blogs.FindAsync(blogID);
-                UserLikesOrDislikesBlog liker = await db.LikesOrDislikesBlogs.FindAsync(username, blog.BlogEntryID);
+                UserLikesOrDislikesBlog liker = await db.LikesOrDislikesBlogs.FindAsync(
+                    username, blog.BlogEntryID);
 
                 if (liker == null)
                 {
-                    UserLikesOrDislikesBlog likesOrDislikes =
-                        new UserLikesOrDislikesBlog();
+                    UserLikesOrDislikesBlog likesOrDislikes = new UserLikesOrDislikesBlog();
 
                     likesOrDislikes.UserName = username;
                     likesOrDislikes.BlogID = blog.BlogEntryID;
@@ -264,7 +265,7 @@ namespace BlogApp2.Controllers
                     db.LikesOrDislikesBlogs.Add(likesOrDislikes);
                     blog.NumOfDislikes++;
                     db.SaveChanges();
-                    return PartialView("AddDislikes", blog);
+                    return RedirectToAction("Read", new { id = blogID });
                 }
                 if (liker.HasDisliked == false && liker.HasLiked == true)
                 {
@@ -273,7 +274,7 @@ namespace BlogApp2.Controllers
                     blog.NumOfLikes--;
                     blog.NumOfDislikes++;
                     db.SaveChanges();
-                    return PartialView("AddDislikes", blog);
+                    return RedirectToAction("Read", new { id = blogID });
 
                 }
                 if (liker.HasDisliked == true && liker.HasLiked == false)
@@ -282,7 +283,7 @@ namespace BlogApp2.Controllers
                     liker.HasLiked = false;
                     blog.NumOfDislikes--;
                     db.SaveChanges();
-                    return PartialView("AddDislikes", blog);
+                    return RedirectToAction("Read", new { id = blogID });
                 }
                 if (liker.HasDisliked == false && liker.HasLiked == false)
                 {
@@ -290,12 +291,12 @@ namespace BlogApp2.Controllers
                     liker.HasLiked = false;
                     blog.NumOfDislikes++;
                     db.SaveChanges();
-                    return PartialView("AddDislikes", blog);
+                    return RedirectToAction("Read", new { id = blogID });
                 }
 
             }
 
-            return PartialView("AddDislikes");
+            return RedirectToAction("Read", new { id = blogID });
         }
 
         /*Checking if a blog exists by checking for its ID which is a private key (no duplication).*/
@@ -408,9 +409,9 @@ namespace BlogApp2.Controllers
 
             //Removing blog from database.
             db.Blogs.Remove(blog);
-
             List<CommentModel> comments = await db.Comments.Where(x => x.BlogCommentedOnID == id).ToListAsync();
 
+            //Remove all the comments beloning to the blog.
             foreach (CommentModel comment in comments)
             {
                 db.Comments.Remove(comment);
@@ -458,7 +459,7 @@ namespace BlogApp2.Controllers
             await db.SaveChangesAsync();
 
             //return await Read(BlogID);
-            return View(comment);
+            return RedirectToAction("Read", new { id = blogID });
 
         }
 

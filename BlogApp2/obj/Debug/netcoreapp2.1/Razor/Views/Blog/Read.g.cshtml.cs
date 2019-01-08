@@ -77,7 +77,7 @@ using Microsoft.AspNetCore.Authorization;
             WriteLiteral("\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n");
             EndContext();
             BeginContext(363, 1172, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5fdf0d262bde406abe1d203f0b3f3eef", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7ae3905c51774776841f01674fbfb097", async() => {
                 BeginContext(369, 11, true);
                 WriteLiteral("\r\n    <h2> ");
                 EndContext();
@@ -164,7 +164,7 @@ using Microsoft.AspNetCore.Authorization;
                 WriteLiteral("                        ");
                 EndContext();
                 BeginContext(1349, 88, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d92ae438155b41d0b12728b7f93fd0a8", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "52ce7af7362744968a97aeaf01c6f4c6", async() => {
                     BeginContext(1427, 6, true);
                     WriteLiteral("Delete");
                     EndContext();
@@ -238,7 +238,7 @@ using Microsoft.AspNetCore.Authorization;
             WriteLiteral("\r\n</html>\r\n\r\n");
             EndContext();
             BeginContext(1548, 402, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "fd029e208d704a67bb140ced83c1c61a", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4732bae7159f41fdb578b8aef28629db", async() => {
                 BeginContext(1608, 6, true);
                 WriteLiteral("\r\n    ");
                 EndContext();
