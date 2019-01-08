@@ -6,7 +6,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - BlogApp2</title>
+
+    <title>@ViewData["Title"] - Hobbyist</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -19,7 +20,7 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
-<body>
+<body id="id1">
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -33,11 +34,26 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <!--Hide nav bar items from unauthorised users.-->
                     @if ((await AuthorizationService.AuthorizeAsync(User, "Blogger")).Succeeded)
                     {
                         <li><a asp-area="" asp-controller="Blog" asp-action="Create">Create</a></li>
                         <li><a asp-area="" asp-controller="Blog" asp-action="MyBlogs">My Blogs</a></li>
                     }
+                    <!--Buttons to magnify or reset size of font.-->
+                    <li>
+                        <button style="margin:12px" type="button"
+                                onclick="document.getElementById('id1').style.fontSize ='x-large'">
+                            Magnify
+                        </button>
+                    </li>
+                    <li>
+                        <button style="margin:12px" type="button"
+                                onclick="document.getElementById('id1').style.fontSize ='140%'">
+                            Normal Size
+                        </button>
+                    </li>
+
                 </ul>
                 <partial name="_LoginPartial" />
             </div>
@@ -50,7 +66,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - BlogApp2</p>
+            <p>&copy; 2018 - Hobbyist</p>
         </footer>
     </div>
 
@@ -78,3 +94,5 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+

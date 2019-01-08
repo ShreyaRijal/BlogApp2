@@ -1,13 +1,14 @@
 ﻿/*
  * This controller class has implemented the basic functionality of CRUD which 
  * involves the creation, reading, updating and, deletion of a blog object.
- * 
+ * It also allows users to see all the blogs ever posted and a list of their 
+ * own blogs in a "MyBlogs" page.
+ * Users can also write comments for blogs and delete them.
  */
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using BlogApp2.Data;
 using BlogApp2.Models;
@@ -19,13 +20,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlogApp2.Controllers
 {
-
-    //As this class is a controller, it inherits from the controller class.
     public class BlogController : Controller
     {
         //An instance of the database.
         private ApplicationDbContext db;
+
+        //The username of the person currently logged in.
         public string username;
+
         private readonly UserManager<IdentityUser> _userManager;
 
         private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -38,7 +40,7 @@ namespace BlogApp2.Controllers
             this._userManager = userManager;
         }
 
-
+        //Returns the username of the current logged in user.
         public async Task GetCurrentUserName()
         {
             var user = await GetCurrentUserAsync();
@@ -47,18 +49,21 @@ namespace BlogApp2.Controllers
 
         }
 
-        //Get request for the CreateBlog view.
+        //Returns a list of the user's own blogs.
         [HttpGet]
         [Authorize(Policy = "Blogger")]
         public async Task<IActionResult> MyBlogs()
         {
             await GetCurrentUserName();
             List<BlogModel> blogs = new List<BlogModel>();
-            blogs = await db.Blogs.Where (x => x.UserName == username).ToListAsync();
+
+            //A list of blogs beloning to the user that's logged in.
+            blogs = await db.Blogs.Where(x => x.UserName == username).ToListAsync();
 
             return View(blogs);
         }
 
+        //Get request for the CreateBlog view. Only those authorized to blog can access it.
         [HttpGet]
         [Authorize(Policy = "Blogger")]
         public IActionResult Create()
@@ -66,108 +71,130 @@ namespace BlogApp2.Controllers
             return View("CreateBlog");
         }
 
-        //Post request from the view CreateBlog.
+        //Post request to create a blog. User has to be authorized.
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize(Policy = "Blogger")]
         public async Task<IActionResult> Create(string title, string entry)
         {
-
             //Creating an instance of a blog object.
             BlogModel blog = new BlogModel();
 
             await GetCurrentUserName();
 
-            blog.UserName = username;
-            blog.BlogTitle = title;
-            blog.BlogEntry = entry;
-            if (ModelState.IsValid)
+            //Check if user has entered something into the text fields.
+            if (title != null && entry != null)
             {
-                //Updating the database by adding the blog object.
-                db.Blogs.Add(blog);
+                blog.UserName = username;
+                blog.BlogTitle = title;
+                blog.BlogEntry = entry;
 
-                //Saving the changes made to the database.
-                db.SaveChanges();
-                return RedirectToAction(nameof(MyBlogs));
-            }
 
-            //Returning the appropriate view.
-            return View(blog);
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Read(string CommentText, string BlogID)
-        {
-            await GetCurrentUserName();
-
-            CommentModel comment = new CommentModel();
-
-            comment.CommentText = CommentText;
-            comment.BlogCommentedOnID = BlogID;
-            comment.UserName = username;
-
-            BlogModel blog = db.Blogs.Find(BlogID);
-
-            List<CommentModel> comments = await db.Comments.Where(x => x.BlogCommentedOnID == BlogID).ToListAsync();
-
-            BlogWithComments b = new BlogWithComments(blog, comments);
-            b.BlogID = BlogID;
-
-            if (ModelState.IsValid)
-            {
-
-                db.Comments.Add(comment);
-
-                db.SaveChanges();
-
-                if (BlogID != null)
+                if (ModelState.IsValid)
                 {
-                    return await Read(BlogID);
-                }
-            }
+                    //Updating the database by adding the blog object.
+                    db.Blogs.Add(blog);
 
-            //Returning the appropriate view.
-            return View(b);
+                    //Saving the changes made to the database.
+                    db.SaveChanges();
+                    return RedirectToAction(nameof(MyBlogs));
+                }
+
+                return View(blog);
+            }
+            return View("CreateBlog");
+
         }
 
-
+        //Gets the blog and the comments for it. User doesn't have to be logged in to see this.
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Read(string id)
         {
             await GetCurrentUserName();
+
+            //Get the relevant blog.
             BlogModel blog = db.Blogs.Find(id);
 
+            //Get the relevant comments.
             List<CommentModel> comments = await db.Comments.Where(x => x.BlogCommentedOnID == id).ToListAsync();
 
-            BlogWithComments b = new BlogWithComments(blog, comments);
-            b.BlogID = id;
-            b.UserName = username;
-            return View(b);
+            //Pass them to this specific view model.
+            if (comments != null)
+            {
+                BlogWithComments b = new BlogWithComments(blog, comments);
+                b.BlogID = id;
+                b.UserName = username;
+                return View(b);
+            }
+            BlogWithComments b2 = new BlogWithComments(blog);
+            b2.BlogID = id;
+            b2.UserName = username;
+            return View(b2);
         }
 
-        //A get request for the ShowPosts view.
+        //User can post comments on a blog.
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Read(string commentText, string blogID)
+        {
+            await GetCurrentUserName();
 
+            CommentModel comment = new CommentModel();
+
+            //Check if something was written in the text field.
+            if (commentText != null)
+            {
+                comment.CommentText = commentText;
+                comment.BlogCommentedOnID = blogID;
+                comment.UserName = username;
+
+                //Find the relevant blog
+                BlogModel blog = db.Blogs.Find(blogID);
+
+                //Find the relevant comments.
+                List<CommentModel> comments = await db.Comments.Where(x => x.BlogCommentedOnID == blogID).ToListAsync();
+
+                //Create a view specific model using the two.
+                BlogWithComments b = new BlogWithComments(blog, comments);
+                b.BlogID = blogID;
+
+                if (ModelState.IsValid)
+                {
+                    
+                    db.Comments.Add(comment);
+
+                    db.SaveChanges();
+
+                    return await Read(blogID);
+                }
+
+            }
+            return await Read(blogID);
+        }
+
+        //Returning all of the blogs.
         [HttpGet]
         [AllowAnonymous]
         public IActionResult JustBlogs()
         {
-            //Returning the list of blog objects saved. 
-
             return View(db.Blogs.ToList());
         }
 
+        //User can toggle to like and remove the like from a blog.
         [Authorize]
-        public async Task<IActionResult> AddLikes(string BlogID)
+        public async Task<IActionResult> AddLikes(string blogID)
         {
             await GetCurrentUserName();
 
-            if (BlogID != null)
+            if (blogID != null)
             {
-                BlogModel blog = await db.Blogs.FindAsync(BlogID);
+                BlogModel blog = await db.Blogs.FindAsync(blogID);
                 UserLikesOrDislikesBlog liker = await db.LikesOrDislikesBlogs.FindAsync(username, blog.BlogEntryID);
                 if (liker == null)
                 {
+                    //Add the user and their like to the database for a specific blog.
                     UserLikesOrDislikesBlog likesOrDislikes =
                         new UserLikesOrDislikesBlog();
 
@@ -178,36 +205,52 @@ namespace BlogApp2.Controllers
                     db.LikesOrDislikesBlogs.Add(likesOrDislikes);
                     blog.NumOfLikes++;
                     db.SaveChanges();
-                    return RedirectToAction("JustBlogs");
+                    return PartialView("AddLikes", blog);
+                    //return await Read(BlogID);
                 }
-                if (liker.HasDisliked == true)
+                //Logic to toggle the like.
+                if (liker.HasLiked == false && liker.HasDisliked == true)
                 {
                     liker.HasDisliked = false;
                     liker.HasLiked = true;
                     blog.NumOfLikes++;
                     blog.NumOfDislikes--;
                     db.SaveChanges();
-                    return RedirectToAction("JustBlogs");
+                    return PartialView("AddLikes", blog);
                 }
-                if (liker.HasLiked == true)
+                if (liker.HasLiked == true && liker.HasDisliked == false)
                 {
-                    return RedirectToAction("JustBlogs");
+                    liker.HasDisliked = false;
+                    liker.HasLiked = false;
+                    blog.NumOfLikes--;
+                    db.SaveChanges();
+                    return PartialView("AddLikes", blog);
+                }
+                if (liker.HasLiked == false && liker.HasDisliked == false)
+                {
+                    liker.HasDisliked = false;
+                    liker.HasLiked = true;
+                    blog.NumOfLikes++;
+                    db.SaveChanges();
+                    return PartialView("AddLikes", blog);
+                    //return await Read(BlogID);
                 }
 
             }
-            //Returning the list of blog objects saved. 
-            return View("JustBlogs");
+            return PartialView("AddLikes");
         }
 
+
+        //Same as AddLikes method but this time user can toggle dislikes on a blog.
         [Authorize]
-        public async Task<IActionResult> AddDislikes(string BlogID)
+        public async Task<IActionResult> AddDislikes(string blogID)
         {
             await GetCurrentUserName();
 
-            if (BlogID != null)
+            if (blogID != null)
             {
-                BlogModel blog = await db.Blogs.FindAsync(BlogID);
-                UserLikesOrDislikesBlog liker = await db.LikesOrDislikesBlogs.FindAsync(username,blog.BlogEntryID);
+                BlogModel blog = await db.Blogs.FindAsync(blogID);
+                UserLikesOrDislikesBlog liker = await db.LikesOrDislikesBlogs.FindAsync(username, blog.BlogEntryID);
 
                 if (liker == null)
                 {
@@ -221,26 +264,38 @@ namespace BlogApp2.Controllers
                     db.LikesOrDislikesBlogs.Add(likesOrDislikes);
                     blog.NumOfDislikes++;
                     db.SaveChanges();
-                    return RedirectToAction("JustBlogs");
+                    return PartialView("AddDislikes", blog);
                 }
-                if (liker.HasLiked == true)
+                if (liker.HasDisliked == false && liker.HasLiked == true)
                 {
                     liker.HasDisliked = true;
                     liker.HasLiked = false;
                     blog.NumOfLikes--;
                     blog.NumOfDislikes++;
                     db.SaveChanges();
-                    return RedirectToAction("JustBlogs");
+                    return PartialView("AddDislikes", blog);
+
                 }
-                if (liker.HasDisliked == true)
+                if (liker.HasDisliked == true && liker.HasLiked == false)
                 {
-                    return RedirectToAction("JustBlogs");
+                    liker.HasDisliked = false;
+                    liker.HasLiked = false;
+                    blog.NumOfDislikes--;
+                    db.SaveChanges();
+                    return PartialView("AddDislikes", blog);
+                }
+                if (liker.HasDisliked == false && liker.HasLiked == false)
+                {
+                    liker.HasDisliked = true;
+                    liker.HasLiked = false;
+                    blog.NumOfDislikes++;
+                    db.SaveChanges();
+                    return PartialView("AddDislikes", blog);
                 }
 
             }
 
-            //Returning the list of blog objects saved. 
-            return View("JustBlogs");
+            return PartialView("AddDislikes");
         }
 
         /*Checking if a blog exists by checking for its ID which is a private key (no duplication).*/
@@ -262,7 +317,7 @@ namespace BlogApp2.Controllers
                 return NotFound();
             }
 
-            //Finds id in the database.
+            //Finds blog in database with corresponding id.
             var blog = await db.Blogs.FindAsync(id);
             if (blog == null)
             {
@@ -292,9 +347,9 @@ namespace BlogApp2.Controllers
             }
             try
             {
-
                 blog.UserName = username;
-                //Updating and saving database
+
+                //Updating and saving database.
                 db.Update(blog);
                 await db.SaveChangesAsync();
 
@@ -354,6 +409,13 @@ namespace BlogApp2.Controllers
             //Removing blog from database.
             db.Blogs.Remove(blog);
 
+            List<CommentModel> comments = await db.Comments.Where(x => x.BlogCommentedOnID == id).ToListAsync();
+
+            foreach (CommentModel comment in comments)
+            {
+                db.Comments.Remove(comment);
+            }
+
             //Updating changes.
             await db.SaveChangesAsync();
 
@@ -361,6 +423,7 @@ namespace BlogApp2.Controllers
             return RedirectToAction(nameof(MyBlogs));
         }
 
+        //Takes user into the DeleteComment view for the comment with the corresponding id.
         [Authorize]
         public async Task<IActionResult> DeleteComment(int id)
         {
@@ -372,33 +435,32 @@ namespace BlogApp2.Controllers
 
             var comment = await db.Comments
                 .FirstOrDefaultAsync(m => m.CommentsId.Equals(id));
-            if (comment == null)
+            if (comment != null)
             {
-                return NotFound();
+                return View(comment);
             }
 
-            return View(comment);
+            return NotFound();
         }
 
+        //Delete the comment from the database. 
         [HttpPost, ActionName("DeleteComment")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> ConfirmComment(int id)
+        public async Task<IActionResult> ConfirmComment(int id, string blogID)
         {
 
             var comment = await db.Comments.FindAsync(id);
-
-            string BlogID = comment.BlogCommentedOnID;
 
             db.Comments.Remove(comment);
 
             //Updating changes.
             await db.SaveChangesAsync();
 
-
+            //return await Read(BlogID);
             return View(comment);
+
         }
 
     }
-
 }

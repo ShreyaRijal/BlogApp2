@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//Model to represent if a user has liked or disliked a blog.
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlogApp2.Models
 {
@@ -16,6 +13,7 @@ namespace BlogApp2.Models
 
         [Key, Column(Order = 1)]
         [Required]
+        [Editable(false)]
         public string BlogID { get; set; }
 
         [Required]

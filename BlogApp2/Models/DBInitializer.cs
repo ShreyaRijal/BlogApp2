@@ -1,55 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//Initialise database with users.
 using System.Linq;
 using System.Threading.Tasks;
 using BlogApp2.Data;
-using BlogApp2.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BlogApp2.Models
 {
     public static class DbInitializer
     {
-        static string[] the_roles = new string[] { "Blogger", "User" };
 
-
-        public static async Task IntializeAsync(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public static void Intialize(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
-            //await CreateUsersAsync(userManager);
-            // await CreateRoles(roleManager);
+            CreateUsers(userManager);
+
         }
 
-        private static void CreateData(ApplicationDbContext context)
-        {
-            context.Database.EnsureCreated();
-            context.Blogs.Add(new BlogModel() { BlogTitle = "Test", BlogEntry = "Entry Test" });
-            context.SaveChanges();
-        }
-
-        private static async Task CreateUsersAsync(UserManager<IdentityUser> um)
+        //Make initial users.
+        private static void CreateUsers(UserManager<IdentityUser> um)
         {
             IdentityUser user = new IdentityUser
             {
-                UserName = "shreyaAdmin@email.com",
-                Email = "shreyaAdmin@email.com"
+                UserName = "Member1@email.com",
+                Email = "Member1@email.com"
             };
-
-            // userManager.CreateAsync(user, "P@ssword123!").Wait();
-            var claims = (await um.GetClaimsAsync(user)).Select(x=>x.Type);
-            await um.AddClaimAsync(user, new System.Security.Claims.Claim("Admin", "true"));
-        }
-
-        private static async Task CreateRoles(RoleManager<IdentityRole> rm)
-        {
-            foreach (var role in the_roles)
+            IdentityUser user2 = new IdentityUser
             {
-                if (!await rm.RoleExistsAsync(role))
-                {
-                    var create_role = await rm.CreateAsync(new IdentityRole(role));
-                }
-            }
+                UserName = "Customer1@email.com",
+                Email = "Customer1@email.com"
+            };
+            IdentityUser user3 = new IdentityUser
+            {
+                UserName = "Customer2@email.com",
+                Email = "Customer2@email.com"
+            };
+            IdentityUser user4 = new IdentityUser
+            {
+                UserName = "Customer3@email.com",
+                Email = "Customer3@email.com"
+            };
+            IdentityUser user5 = new IdentityUser
+            {
+                UserName = "Customer4@email.com",
+                Email = "Customer4@email.com"
+            };
+            IdentityUser user6 = new IdentityUser
+            {
+                UserName = "Customer5@email.com",
+                Email = "Customer5@email.com"
+            };
+        
+
+            um.CreateAsync(user, "Password123!").Wait();
+            um.CreateAsync(user2, "Password123!").Wait();
+            um.CreateAsync(user3, "Password123!").Wait();
+            um.CreateAsync(user4, "Password123!").Wait();
+            um.CreateAsync(user5, "Password123!").Wait();
+            um.CreateAsync(user6, "Password123!").Wait();
+
         }
+
     }
 }

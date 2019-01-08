@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//Model to access the Identity Framework users.
+using Microsoft.AspNetCore.Identity;
 
 namespace BlogApp2.Models
 {

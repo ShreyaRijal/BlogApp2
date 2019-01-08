@@ -1,29 +1,26 @@
-﻿@model BlogApp2.Models.CommentModel
+﻿<!--User can view their comment and delete it using the form.-->
+
+@model BlogApp2.Models.CommentModel
 
 @{
-        ViewData["Title"] = "Delete Comment";
-    }
+    ViewData["Title"] = "Delete Comment";
+}
 
 <h3> Are you sure you want to delete this comment?</h3>
-<div>
 
-    <hr />
+<textarea readonly rows="3" cols="100"
+          style="width:100%;
+                height:100%;"> @Html.DisplayFor(model => model.CommentText)
+        </textarea>
 
-    <dl class="dl-horizontal">
-        <dt>
-            Comment:
-        </dt>
-        <dd>
 
-            @Html.DisplayFor(model => model.CommentText)
-        </dd>
-    </dl>
+<form asp-action="DeleteComment" asp-controller="Blog" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="@Model.CommentsId" name="ID" />
+    <input type="hidden" asp-for="@Model.BlogCommentedOnID" name="BlogID" />
+    <button type="submit" value="Delete">Delete</button>
+</form>
 
-    <form asp-action="DeleteComment">
-        <input type="hidden" asp-for="CommentsId" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-    </form>
+<a asp-action="Read" asp-route-id="@Model.BlogCommentedOnID">Back to Blog</a>
 
-    <a asp-action="Read" asp-route-id="@Model.BlogCommentedOnID">Back to List</a>
-</div>
 

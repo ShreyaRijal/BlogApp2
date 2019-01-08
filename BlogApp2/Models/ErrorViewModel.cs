@@ -1,3 +1,4 @@
+//Model for general errors.
 using System;
 
 namespace BlogApp2.Models

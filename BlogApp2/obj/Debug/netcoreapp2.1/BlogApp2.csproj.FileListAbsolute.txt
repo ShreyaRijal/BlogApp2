@@ -69,3 +69,5 @@ C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Areas\Identity\Pages\Account\ResetPasswordConfirmation.g.cshtml.cs
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Areas\Identity\Pages\Error.g.cshtml.cs
 C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\DeleteComment.g.cshtml.cs
+C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\AddDislikes.g.cshtml.cs
+C:\Users\Hosanna\Documents\year3\CSC348\BlogApp2\BlogApp2\obj\Debug\netcoreapp2.1\Razor\Views\Blog\AddLikes.g.cshtml.cs

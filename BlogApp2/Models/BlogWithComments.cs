@@ -1,10 +1,7 @@
-﻿using BlogApp2.Controllers;
-using BlogApp2.Data;
-using Microsoft.AspNetCore.Identity;
-using System;
+﻿//View Specific Model for a blog and all its comments.
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlogApp2.Models
 {
@@ -15,6 +12,7 @@ namespace BlogApp2.Models
 
         public List<CommentModel> Comments { get; set; }
 
+        [Editable(false)]
         public string BlogID { get; set; }
 
         public string CommentText { get; set; }

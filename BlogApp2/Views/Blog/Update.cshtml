@@ -1,4 +1,6 @@
-﻿@model BlogApp2.Models.BlogModel
+﻿<!--A form to update and already existig blog.-->
+
+@model BlogApp2.Models.BlogModel
 
 @{
     ViewData["Title"] = "Update";
@@ -7,27 +9,27 @@
 <h2>Update</h2>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Update">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="BlogEntryID" />
-                <div class="form-group">
-                    <label asp-for="BlogTitle" class="control-label"></label>
-                    <input asp-for="BlogTitle" class="form-control" />
-                    <span asp-validation-for="BlogTitle" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="BlogEntry" class="control-label"></label>
-                    <input asp-for="BlogEntry" class="form-control" />
-                    <span asp-validation-for="BlogEntry" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
-        </form>
+
+<form asp-action="Update">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.BlogEntryID" />
+    <div class="form-group">
+        <label asp-for="@Model.BlogTitle" class="control-label">Title</label>
+        <textarea id="txtArea" asp-for="@Model.BlogTitle" minlength="2" maxlength="100" rows="1" cols="100" style="width:100%;
+                height:100%;"></textarea>
+        <span asp-validation-for="@Model.BlogTitle" class="text-danger"></span>
     </div>
-</div>
+    <div class="form-group">
+        <label asp-for="@Model.BlogEntry" class="control-label">Entry</label>
+        <textarea id="txtArea" asp-for="@Model.BlogEntry" minlength="10" maxlength="10000" rows="15" cols="100" style="width:100%;
+                height:100%;"></textarea>
+        <span asp-validation-for="@Model.BlogEntry" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" value="Save">Save</button>
+    </div>
+</form>
 
 <div>
     <a asp-action="MyBlogs">Back to List</a>

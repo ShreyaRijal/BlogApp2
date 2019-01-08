@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//Model class for comment objects.
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlogApp2.Models
 {
     public class CommentModel
     {
         [Key]
+        [Editable(false)]
         public int CommentsId { get; set; }
 
         [MinLength(2)]
-        [MaxLength(100)]
+        [MaxLength(400)]
         [Required]
         public string CommentText { get; set; }
 
         [Required]
+        [Editable(false)]
         public string BlogCommentedOnID { get; set; }
 
         [Required]

@@ -1,4 +1,7 @@
-﻿@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+﻿<!--A list of all the blogs, displaying the blogger's username, the blog title, 
+    and the number of likes and dislikes on the blog.-->
+
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
 @model IEnumerable<BlogApp2.Models.BlogModel>
 @{
     ViewData["Title"] = "JustBlogs";
@@ -16,23 +19,16 @@
                 <li style="border: 2px solid green;
                 border-radius: 10px;
                 background-color: lightgreen;
-                margin-bottom: 20px;
-                padding: 30px">
+                margin-bottom: 5px;
+                padding: 10px">
                     Posted By: @blog.UserName  <br /><br />
                     Title: @blog.BlogTitle <br /><br />
-
-                    @Html.ActionLink("Like", "AddLikes", new { BlogID = blog.BlogEntryID })
-                    &nbsp;
-                    @blog.NumOfLikes
-                    &nbsp;
-                    @Html.ActionLink("Dislike", "AddDislikes", new { BlogID = blog.BlogEntryID })
-                    &nbsp;
-                    @blog.NumOfDislikes
-
-
                 </li>
             </a>
-
+            <li>
+               Likes: @blog.NumOfLikes  Dislikes: @blog.NumOfDislikes
+                <br /><br />
+            </li>
         }
     </ul>
 

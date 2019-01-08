@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BlogApp2.Data;
@@ -14,9 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 using BlogApp2.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace BlogApp2
 {
@@ -48,6 +43,7 @@ namespace BlogApp2
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            //Creating a policy to allow users to post blogs via the claims.
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Blogger", policy => policy.RequireClaim("Admin", "true"));
@@ -66,7 +62,7 @@ namespace BlogApp2
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Shared/Error");
                 app.UseHsts();
             }
 
@@ -88,28 +84,23 @@ namespace BlogApp2
             app.UseCookiePolicy();
             app.UseMvc();
             app.UseAuthentication();
-
+            DbInitializer.Intialize(context,userManager);
             CreateClaim(serviceProvider).Wait();
         }
 
+        //Allowing more privileges to some users via claim based authorization.
         private async Task CreateClaim(IServiceProvider serviceProvider)
         {
             var um = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            IdentityUser user = await um.FindByEmailAsync("shreyaAdmin@email.com");
-            IdentityUser user2 = await um.FindByEmailAsync("canblog@email.com");
+            //This user can post blogs.
+            IdentityUser user = await um.FindByEmailAsync("Member1@email.com");
 
             var claimList = (await um.GetClaimsAsync(user)).Select(p => p.Type);
-            var claimList2 = (await um.GetClaimsAsync(user2)).Select(p => p.Type);
 
             if (!claimList.Contains("Admin"))
             {
                 await um.AddClaimAsync(user, new Claim("Admin", "true"));
-            }
-
-            if (!claimList2.Contains("Admin"))
-            {
-                await um.AddClaimAsync(user2, new Claim("Admin", "true"));
             }
 
         }

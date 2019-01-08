@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//A model for a blog object.
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlogApp2.Models
 {
@@ -32,6 +29,7 @@ namespace BlogApp2.Models
         [Required]
         public string BlogEntry { get; set; }
 
+        //Creating custom ID for blog.
         private string MakeBlogID(string BlogEntryID)
         {
             this.BlogEntryID = BlogEntryID;

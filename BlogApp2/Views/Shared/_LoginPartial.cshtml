@@ -3,19 +3,38 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
+<!--CSS style sheet for common objects in the web pages.-->
 <style>
     .navbar {
-        background-color:darkgreen;
-        color:lightgray
+        background-color: darkgreen;
+        color: darkgrey
     }
+
     * {
         font-family: Verdana;
     }
 
     body {
         background-color: lightgrey;
+        width: auto
     }
 
+    textarea {
+        border-radius: 10px;
+        border: 2px solid green;
+        background-color: lightgreen;
+    }
+
+    button {
+        border-radius: 10px;
+        border: 2px solid green;
+        background-color: lightgreen;
+    }
+
+        button:hover {
+            background-color: green;
+            color: white;
+        }
 </style>
 
 @if (SignInManager.IsSignedIn(User))
@@ -23,7 +42,7 @@
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("JustBlogs", "Blog", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Welcome @UserManager.GetUserName(User)!</a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>

@@ -1,0 +1,10 @@
+﻿<!--Dislike link button.-->
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@model BlogApp2.Models.BlogModel
+@{
+    ViewData["Title"] = "AddDislikes";
+}
+
+@Html.ActionLink("Dislike", "AddDislikes", new { BlogID = Model.BlogEntryID })
+    &nbsp;
+@Html.Encode(Model.NumOfDislikes)
